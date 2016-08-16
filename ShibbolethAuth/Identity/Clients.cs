@@ -17,11 +17,11 @@ namespace ShibbolethAuth.Identity
 
                     RedirectUris = new List<string>
                     {
-                        "https://localhost:44319/"
+                        Startup.BaseUrl
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
-                        "https://localhost:44319/"
+                        Startup.BaseUrl
                     },
                     AllowedScopes = new List<string>
                     {

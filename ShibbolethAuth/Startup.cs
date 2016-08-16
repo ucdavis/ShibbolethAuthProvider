@@ -69,7 +69,7 @@ namespace ShibbolethAuth
             {
                 Authority = BaseUrl + "identity",
 
-                ClientId = "mvc",
+                ClientId = "web",
                 Scope = "openid saml",
                 ResponseType = "id_token token",
                 RedirectUri = BaseUrl,
