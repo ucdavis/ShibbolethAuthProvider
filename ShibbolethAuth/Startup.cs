@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Metadata;
+using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
@@ -32,20 +33,20 @@ namespace ShibbolethAuth
 
         public void Configuration(IAppBuilder app)
         {
-            //Kentor.AuthServices.Configuration.Options.GlobalEnableSha256XmlSignatures();
+            Options.GlobalEnableSha256XmlSignatures();
 
             // todo: replace with serilog
             //LogProvider.SetCurrentLogProvider(new DiagnosticsTraceLogProvider());
 
-            //AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimTypes.Subject;
-            //JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
-            
+            AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimTypes.Subject;
+            JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
+
             app.Map("/identity", idsrvApp =>
             {
                 idsrvApp.UseIdentityServer(new IdentityServerOptions
                 {
                     SiteName = "UC Identity Server",
-                    // SigningCertificate = LoadCertificate(),
+                    SigningCertificate = LoadCertificate(),
 
                     Factory = new IdentityServerServiceFactory()
                     .UseInMemoryUsers(Users.Get())
