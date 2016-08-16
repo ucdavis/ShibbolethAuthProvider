@@ -29,6 +29,27 @@ namespace ShibbolethAuth.Identity
                         "profile",
                         "saml"
                     }
+                },
+                new Client
+                {
+                    ClientName = "Auth0 Client",
+                    ClientId = "auth0",
+                    Flow = Flows.Implicit,
+
+                    RedirectUris = new List<string>
+                    {
+                        "https://ucdavis.auth0.com/login/callback"
+                    },
+                    PostLogoutRedirectUris = new List<string>
+                    {
+                        "https://ucdavis.auth0.com/login/callback"
+                    },
+                    AllowedScopes = new List<string>
+                    {
+                        "openid",
+                        "profile",
+                        "saml"
+                    }
                 }
             };
         }

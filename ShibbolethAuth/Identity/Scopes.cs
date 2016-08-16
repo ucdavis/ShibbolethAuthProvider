@@ -13,6 +13,8 @@ namespace ShibbolethAuth.Identity
                 {
                     Enabled = true,
                     Name = "saml",
+                    DisplayName = "Profile Information",
+                    Description = "Basic profile information including your name",
                     Type = ScopeType.Identity,
                     Required = true,
                     Claims = new List<ScopeClaim>

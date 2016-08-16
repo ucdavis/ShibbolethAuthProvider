@@ -71,7 +71,6 @@ namespace ShibbolethAuth
             app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
             {
                 Authority = BaseUrl + "identity",
-
                 ClientId = "web",
                 Scope = "openid saml",
                 ResponseType = "id_token token",
