@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Metadata;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Helpers;
@@ -144,7 +145,8 @@ namespace ShibbolethAuth
                 Caption = "SAML2p",
             };
 
-            //authServicesOptions.SPOptions.ServiceCertificates.Add(LoadCertificate());
+            // TODO: shibboleth test server requires a service certificate
+            authServicesOptions.SPOptions.ServiceCertificates.Add(LoadCertificate());
 
             //authServicesOptions.IdentityProviders.Add(new IdentityProvider(
             //  new EntityId("urn:mace:incommon:ucdavis.edu"),
@@ -169,5 +171,13 @@ namespace ShibbolethAuth
             //    ClientSecret = "3pyawKDWaXwsPuRDL7LtKm_o"
             //});
         }
+
+        X509Certificate2 LoadCertificate()
+        {
+            // TODO: get rid of test certificate
+            return new X509Certificate2(
+                string.Format(@"{0}\identity\idsrv3test.pfx", AppDomain.CurrentDomain.BaseDirectory), "idsrv3test");
+        }
+
     }
 }
