@@ -34,7 +34,7 @@ namespace ShibbolethAuth.Identity
                 {
                     ClientName = "Auth0 Client",
                     ClientId = "auth0",
-                    Flow = Flows.Implicit,
+                    Flow = Flows.AuthorizationCode,
 
                     RedirectUris = new List<string>
                     {
