@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Metadata;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -7,6 +8,9 @@ using System.Web;
 using System.Web.Helpers;
 using IdentityServer3.Core;
 using IdentityServer3.Core.Configuration;
+using Kentor.AuthServices;
+using Kentor.AuthServices.Configuration;
+using Kentor.AuthServices.Owin;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
@@ -23,6 +27,7 @@ namespace ShibbolethAuth
     public class Startup
     {
         public static string BaseUrl = "https://shibbolethauthtest.azurewebsites.net/";
+        public static string IdpUrl = "http://www.testshib.org/metadata/testshib-providers.xml";
 
         public void Configuration(IAppBuilder app)
         {
@@ -49,7 +54,7 @@ namespace ShibbolethAuth
                     AuthenticationOptions = new AuthenticationOptions
                     {
                         EnablePostSignOutAutoRedirect = true,
-                        //IdentityProviders = ConfigureIdentityProviders,
+                        IdentityProviders = ConfigureIdentityProviders,
                         EnableLocalLogin = false,
                     }
                 });
@@ -123,5 +128,46 @@ namespace ShibbolethAuth
             });
         }
 
+        private void ConfigureIdentityProviders(IAppBuilder app, string signInAsType)
+        {
+            // Configure Kentor SAML Identity Provider
+            var authServicesOptions = new KentorAuthServicesAuthenticationOptions(false)
+            {
+                SPOptions = new SPOptions
+                {
+                    EntityId = new EntityId(BaseUrl),
+                    ReturnUrl = new Uri(BaseUrl),
+                    AuthenticateRequestSigningBehavior = SigningBehavior.Never // TODO: decide what needs to be here in prod
+                },
+                SignInAsAuthenticationType = signInAsType,
+                AuthenticationType = "saml2p",
+                Caption = "SAML2p",
+            };
+
+            //authServicesOptions.SPOptions.ServiceCertificates.Add(LoadCertificate());
+
+            //authServicesOptions.IdentityProviders.Add(new IdentityProvider(
+            //  new EntityId("urn:mace:incommon:ucdavis.edu"),
+            //  authServicesOptions.SPOptions)
+            //{
+            //    LoadMetadata = true,
+            //    MetadataLocation = "https://shibboleth.ucdavis.edu/idp/shibboleth",
+            //});
+
+            // Federate against the IdP
+            new Federation(IdpUrl, true, authServicesOptions);
+
+            app.UseKentorAuthServicesAuthentication(authServicesOptions);
+
+            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions
+            //{
+            //    AuthenticationType = "Google",
+            //    Caption = "Sign-in with Google",
+            //    SignInAsAuthenticationType = signInAsType,
+
+            //    ClientId = "701386055558-9epl93fgsjfmdn14frqvaq2r9i44qgaa.apps.googleusercontent.com",
+            //    ClientSecret = "3pyawKDWaXwsPuRDL7LtKm_o"
+            //});
+        }
     }
 }
