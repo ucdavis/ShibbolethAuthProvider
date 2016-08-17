@@ -71,6 +71,7 @@ namespace ShibbolethAuth.Identity
                 {
                     ClientName = "Auth0 code",
                     ClientId = "auth0code",
+                    ClientSecrets = new List<Secret> { new Secret("secret".Sha256()) },
                     Flow = Flows.AuthorizationCode,
                     RedirectUris = new List<string>
                     {
