@@ -14,6 +14,7 @@ using IdentityServer3.Core.Configuration;
 using Kentor.AuthServices;
 using Kentor.AuthServices.Configuration;
 using Kentor.AuthServices.Owin;
+using Microsoft.Azure;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
@@ -29,8 +30,8 @@ namespace ShibbolethAuth
 {
     public class Startup
     {
-        public static string BaseUrl = "https://shibbolethauthtest.azurewebsites.net/";
-        public static string IdpUrl = "http://www.testshib.org/metadata/testshib-providers.xml";
+        public static readonly string BaseUrl = CloudConfigurationManager.GetSetting("BaseUrl");
+        public static readonly string FederationUrl = CloudConfigurationManager.GetSetting("FederationUrl");
 
         public void Configuration(IAppBuilder app)
         {
@@ -74,7 +75,6 @@ namespace ShibbolethAuth
                 ClientId = "web",
                 Scope = "openid saml",
                 ResponseType = "id_token token",
-                //ResponseType = "code id_token token",
                 RedirectUri = BaseUrl,
                 SignInAsAuthenticationType = "Cookies",
                 UseTokenLifetime = false,
@@ -159,7 +159,7 @@ namespace ShibbolethAuth
             //});
 
             // Federate against the IdP
-            new Federation(IdpUrl, true, authServicesOptions);
+            new Federation(FederationUrl, true, authServicesOptions);
 
             app.UseKentorAuthServicesAuthentication(authServicesOptions);
 
