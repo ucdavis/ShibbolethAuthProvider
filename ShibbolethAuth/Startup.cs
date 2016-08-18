@@ -14,6 +14,7 @@ using IdentityServer3.Core.Configuration;
 using Kentor.AuthServices;
 using Kentor.AuthServices.Configuration;
 using Kentor.AuthServices.Owin;
+using Kentor.AuthServices.WebSso;
 using Microsoft.Azure;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Owin;
@@ -150,16 +151,16 @@ namespace ShibbolethAuth
             // TODO: shibboleth test server requires a service certificate
             authServicesOptions.SPOptions.ServiceCertificates.Add(LoadCertificate());
 
-            //authServicesOptions.IdentityProviders.Add(new IdentityProvider(
-            //  new EntityId("urn:mace:incommon:ucdavis.edu"),
-            //  authServicesOptions.SPOptions)
-            //{
-            //    LoadMetadata = true,
-            //    MetadataLocation = "https://shibboleth.ucdavis.edu/idp/shibboleth",
-            //});
+            authServicesOptions.IdentityProviders.Add(new IdentityProvider(
+              new EntityId("urn:mace:incommon:ucdavis.edu"),
+              authServicesOptions.SPOptions)
+            {
+                LoadMetadata = true,
+                MetadataLocation = "https://shibboleth.ucdavis.edu/idp/shibboleth",
+            });
 
             // Federate against the IdP
-            new Federation(FederationUrl, true, authServicesOptions);
+            //new Federation(FederationUrl, true, authServicesOptions);
 
             app.UseKentorAuthServicesAuthentication(authServicesOptions);
 
