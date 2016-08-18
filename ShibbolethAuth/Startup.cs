@@ -13,6 +13,7 @@ using IdentityServer3.Core;
 using IdentityServer3.Core.Configuration;
 using Kentor.AuthServices;
 using Kentor.AuthServices.Configuration;
+using Kentor.AuthServices.Metadata;
 using Kentor.AuthServices.Owin;
 using Kentor.AuthServices.WebSso;
 using Microsoft.Azure;
@@ -140,7 +141,8 @@ namespace ShibbolethAuth
                 SPOptions = new SPOptions
                 {
                     EntityId = new EntityId(BaseUrl),
-                    ReturnUrl = new Uri(BaseUrl),
+                    ReturnUrl = new Uri(BaseUrl),                    
+                    //AttributeConsumingServices = { attributeService },
                     AuthenticateRequestSigningBehavior = SigningBehavior.Never // TODO: decide what needs to be here in prod
                 },
                 SignInAsAuthenticationType = signInAsType,
@@ -173,6 +175,17 @@ namespace ShibbolethAuth
             //    ClientId = "701386055558-9epl93fgsjfmdn14frqvaq2r9i44qgaa.apps.googleusercontent.com",
             //    ClientSecret = "3pyawKDWaXwsPuRDL7LtKm_o"
             //});
+        }
+
+        AttributeConsumingService GetAttributeService()
+        {
+            var requestedAttribute = new RequestedAttribute("urn:oid:1.3.6.1.4.1.5923.1.1.1.6")
+            {
+                FriendlyName = "eppn",
+                //IsRequired = true
+            };
+
+            return new AttributeConsumingService("attributes") { RequestedAttributes = { requestedAttribute } };
         }
 
         X509Certificate2 LoadCertificate()
