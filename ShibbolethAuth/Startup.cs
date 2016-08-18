@@ -150,8 +150,7 @@ namespace ShibbolethAuth
                 Caption = "SAML2p",
             };
 
-            // TODO: shibboleth test server requires a service certificate
-            // authServicesOptions.SPOptions.ServiceCertificates.Add(LoadCertificate());
+            authServicesOptions.SPOptions.ServiceCertificates.Add(LoadCertificate());
 
             authServicesOptions.IdentityProviders.Add(new IdentityProvider(
               new EntityId("urn:mace:incommon:ucdavis.edu"),
@@ -190,10 +189,41 @@ namespace ShibbolethAuth
 
         X509Certificate2 LoadCertificate()
         {
+            var certThumbprint = CloudConfigurationManager.GetSetting("WEBSITE_LOAD_CERTIFICATES");
+
+            return string.IsNullOrWhiteSpace(certThumbprint) ? LoadCertificateFromFile() : LoadCertificateFromCloud(certThumbprint);
+        }
+
+        X509Certificate2 LoadCertificateFromFile()
+        {
             // TODO: get rid of test certificate
             return new X509Certificate2(
                 string.Format(@"{0}\identity\idsrv3test.pfx", AppDomain.CurrentDomain.BaseDirectory), "idsrv3test");
         }
 
+        /// <summary>
+        /// Loads certificate from the azure certificate store.
+        /// See https://azure.microsoft.com/en-us/blog/using-certificates-in-azure-websites-applications/
+        /// Note: Need to have config setting WEBSITE_LOAD_CERTIFICATES with a value set to the certificate thumbprint
+        /// </summary>
+        /// <returns></returns>
+        X509Certificate2 LoadCertificateFromCloud(string thumbprint)
+        {
+            X509Certificate2 certificate = null;
+
+            X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+            certStore.Open(OpenFlags.ReadOnly);
+            X509Certificate2Collection certCollection = certStore.Certificates.Find(
+                                       X509FindType.FindByThumbprint,
+                                       thumbprint,
+                                       false);
+            // Get the first cert with the thumbprint
+            if (certCollection.Count > 0)
+            {
+                certificate = certCollection[0];
+            }
+            certStore.Close();
+            return certificate;
+        }
     }
 }
