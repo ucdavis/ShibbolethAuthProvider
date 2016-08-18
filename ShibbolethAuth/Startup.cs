@@ -149,7 +149,7 @@ namespace ShibbolethAuth
             };
 
             // TODO: shibboleth test server requires a service certificate
-            authServicesOptions.SPOptions.ServiceCertificates.Add(LoadCertificate());
+            // authServicesOptions.SPOptions.ServiceCertificates.Add(LoadCertificate());
 
             authServicesOptions.IdentityProviders.Add(new IdentityProvider(
               new EntityId("urn:mace:incommon:ucdavis.edu"),
