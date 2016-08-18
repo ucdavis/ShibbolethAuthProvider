@@ -139,9 +139,9 @@ namespace ShibbolethAuth
                 SPOptions = new SPOptions
                 {
                     EntityId = new EntityId(BaseUrl),
-                    ReturnUrl = new Uri(BaseUrl),
+                    ReturnUrl = new Uri(BaseUrl),                    
                     AuthenticateRequestSigningBehavior = SigningBehavior.Never // TODO: decide what needs to be here in prod
-                },
+                },                
                 SignInAsAuthenticationType = signInAsType,
                 AuthenticationType = "saml2p",
                 Caption = "SAML2p",
@@ -149,7 +149,7 @@ namespace ShibbolethAuth
 
             // TODO: shibboleth test server requires a service certificate
             authServicesOptions.SPOptions.ServiceCertificates.Add(LoadCertificate());
-
+            
             //authServicesOptions.IdentityProviders.Add(new IdentityProvider(
             //  new EntityId("urn:mace:incommon:ucdavis.edu"),
             //  authServicesOptions.SPOptions)
@@ -157,7 +157,7 @@ namespace ShibbolethAuth
             //    LoadMetadata = true,
             //    MetadataLocation = "https://shibboleth.ucdavis.edu/idp/shibboleth",
             //});
-
+            
             // Federate against the IdP
             new Federation(FederationUrl, true, authServicesOptions);
 
@@ -181,5 +181,30 @@ namespace ShibbolethAuth
                 string.Format(@"{0}\identity\idsrv3test.pfx", AppDomain.CurrentDomain.BaseDirectory), "idsrv3test");
         }
 
+        /// <summary>
+        /// Loads certificate from the azure certificate store.
+        /// See https://azure.microsoft.com/en-us/blog/using-certificates-in-azure-websites-applications/
+        /// Note: Need to have config setting WEBSITE_LOAD_CERTIFICATES with a value set to the certificate thumbprint
+        /// </summary>
+        /// <returns></returns>
+        X509Certificate2 LoadCertificateFromCloud()
+        {
+            X509Certificate2 certificate = null;
+
+            X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+            certStore.Open(OpenFlags.ReadOnly);
+            X509Certificate2Collection certCollection = certStore.Certificates.Find(
+                                       X509FindType.FindByThumbprint,
+                                       // Replace below with your cert's thumbprint
+                                       "THUMBPRINT HERE",
+                                       false);
+            // Get the first cert with the thumbprint
+            if (certCollection.Count > 0)
+            {
+                certificate = certCollection[0];
+            }
+            certStore.Close();
+            return certificate;
+        }
     }
 }
