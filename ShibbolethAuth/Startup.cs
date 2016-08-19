@@ -190,12 +190,55 @@ namespace ShibbolethAuth
                 IsDefault = true,
             };
 
+            //ePPN
             attributeConsumingService.RequestedAttributes.Add(new RequestedAttribute("urn:oid:1.3.6.1.4.1.5923.1.1.1.6")
             {
                 FriendlyName = "eduPersonPrincipalName",
                 NameFormat = new Uri("urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
                 //AttributeValueXsiType = "ScopedAttributeDecoder"
                 //IsRequired = true
+            });
+
+            //Affiliation
+            attributeConsumingService.RequestedAttributes.Add(new RequestedAttribute("urn:oid:1.3.6.1.4.1.5923.1.1.1.9")
+            {
+                FriendlyName = "eduPersonScopedAffiliation",
+                NameFormat = new Uri("urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+            });
+
+            //SN (surname)
+            attributeConsumingService.RequestedAttributes.Add(new RequestedAttribute("urn:oid:2.5.4.4")
+            {
+                FriendlyName = "sn",
+                NameFormat = new Uri("urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+            });
+
+            //givenName
+            attributeConsumingService.RequestedAttributes.Add(new RequestedAttribute("urn:oid:2.5.4.42")
+            {
+                FriendlyName = "givenName",
+                NameFormat = new Uri("urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+            });
+
+            //eduPersonNickname
+            attributeConsumingService.RequestedAttributes.Add(new RequestedAttribute("urn:oid:1.3.6.1.4.1.5923.1.1.1.2")
+            {
+                FriendlyName = "eduPersonNickname",
+                NameFormat = new Uri("urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+            });
+
+            //mail
+            attributeConsumingService.RequestedAttributes.Add(new RequestedAttribute("urn:oid:0.9.2342.19200300.100.1.3")
+            {
+                FriendlyName = "mail",
+                NameFormat = new Uri("urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+            });
+
+            //displayName
+            attributeConsumingService.RequestedAttributes.Add(new RequestedAttribute("urn:oid:2.16.840.1.113730.3.1.241")
+            {
+                FriendlyName = "displayName",
+                NameFormat = new Uri("urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
             });
 
             return attributeConsumingService;
