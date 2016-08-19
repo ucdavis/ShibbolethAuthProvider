@@ -158,6 +158,8 @@ namespace ShibbolethAuth
             {
                 LoadMetadata = true,
                 MetadataLocation = "https://shibboleth.ucdavis.edu/idp/shibboleth",
+                AllowUnsolicitedAuthnResponse = true,
+                WantAuthnRequestsSigned = true
             });
 
             // Federate against the IdP
