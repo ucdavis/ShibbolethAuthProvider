@@ -143,7 +143,7 @@ namespace ShibbolethAuth
                     EntityId = new EntityId(BaseUrl),
                     ReturnUrl = new Uri(BaseUrl),
                     AttributeConsumingServices = { GetAttributeService() },
-                    AuthenticateRequestSigningBehavior = SigningBehavior.Never // TODO: decide what needs to be here in prod
+                    //AuthenticateRequestSigningBehavior = SigningBehavior.Never // TODO: decide what needs to be here in prod
                 },
                 SignInAsAuthenticationType = signInAsType,
                 AuthenticationType = "saml2p",
@@ -195,7 +195,7 @@ namespace ShibbolethAuth
 
             attributeConsumingService.RequestedAttributes.Add(new RequestedAttribute("Minimal"));
 
-            return GetAttributeService();
+            return attributeConsumingService;
         }
 
         X509Certificate2 LoadCertificate()
