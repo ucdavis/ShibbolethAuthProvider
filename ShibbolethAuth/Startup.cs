@@ -157,8 +157,7 @@ namespace ShibbolethAuth
                 authServicesOptions.SPOptions)
             {
                 LoadMetadata = true,
-                MetadataLocation = "https://shibboleth.ucdavis.edu/Shibboleth.sso/Metadata",
-                //MetadataLocation = "https://shibboleth.ucdavis.edu/idp/shibboleth",
+                MetadataLocation = "https://shibboleth.ucdavis.edu/idp/shibboleth",
                 AllowUnsolicitedAuthnResponse = true,
             };
 
