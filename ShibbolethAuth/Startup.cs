@@ -51,7 +51,7 @@ namespace ShibbolethAuth
             // todo: replace with serilog
             //LogProvider.SetCurrentLogProvider(new DiagnosticsTraceLogProvider());
 
-            AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
+            AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimTypes.Subject;
             JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
 
             app.Map("/identity", idsrvApp =>
@@ -107,7 +107,11 @@ namespace ShibbolethAuth
                         var userInfo = await userInfoClient.GetAsync();
                         userInfo.Claims.ToList().ForEach(ui => nid.AddClaim(new Claim(ui.Item1, ui.Item2)));
 
-                        nid.AddClaim(new Claim(ClaimTypes.NameIdentifier, "srkirkland"));
+                        nid.AddClaim(new Claim(Constants.ClaimTypes.GivenName, "Scotty")); //TODO: test
+
+                        //TODO: testing sub
+                        nid.RemoveClaim(nid.Claims.Single(c => c.Type == Constants.ClaimTypes.Subject));
+                        nid.AddClaim(new Claim(Constants.ClaimTypes.Subject, "srkirkland"));
 
                         // keep the id_token for logout
                         nid.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
@@ -120,6 +124,8 @@ namespace ShibbolethAuth
 
                         // add some other app specific claim
                         nid.AddClaim(new Claim("app_specific", "some data"));
+
+
                         
                         n.AuthenticationTicket = new AuthenticationTicket(
                             nid,
