@@ -143,8 +143,8 @@ namespace ShibbolethAuth
                 {
                     EntityId = new EntityId(BaseUrl),
                     ReturnUrl = new Uri(BaseUrl),
-                    NameIdPolicy = new Saml2NameIdPolicy(true, NameIdFormat.Unspecified),
-                    AttributeConsumingServices = { GetAttributeService() },
+                    NameIdPolicy = new Saml2NameIdPolicy(true, NameIdFormat.EntityIdentifier),
+                    //AttributeConsumingServices = { GetAttributeService() },
                     //AuthenticateRequestSigningBehavior = SigningBehavior.Never // TODO: decide what needs to be here in prod
                 },
                 SignInAsAuthenticationType = signInAsType,
