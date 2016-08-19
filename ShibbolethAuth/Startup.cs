@@ -32,6 +32,13 @@ using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationO
 
 namespace ShibbolethAuth
 {
+    public class CAM : ClaimsAuthenticationManager
+    {
+        public CAM() : base()
+        {
+           
+        }
+    }
     public class Startup
     {
         public static readonly string BaseUrl = CloudConfigurationManager.GetSetting("BaseUrl");
@@ -44,7 +51,7 @@ namespace ShibbolethAuth
             // todo: replace with serilog
             //LogProvider.SetCurrentLogProvider(new DiagnosticsTraceLogProvider());
 
-            AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimTypes.Subject;
+            AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
             JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
 
             app.Map("/identity", idsrvApp =>
@@ -100,6 +107,8 @@ namespace ShibbolethAuth
                         var userInfo = await userInfoClient.GetAsync();
                         userInfo.Claims.ToList().ForEach(ui => nid.AddClaim(new Claim(ui.Item1, ui.Item2)));
 
+                        nid.AddClaim(new Claim(ClaimTypes.NameIdentifier, "srkirkland"));
+
                         // keep the id_token for logout
                         nid.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
 
@@ -111,7 +120,7 @@ namespace ShibbolethAuth
 
                         // add some other app specific claim
                         nid.AddClaim(new Claim("app_specific", "some data"));
-
+                        
                         n.AuthenticationTicket = new AuthenticationTicket(
                             nid,
                             n.AuthenticationTicket.Properties);
