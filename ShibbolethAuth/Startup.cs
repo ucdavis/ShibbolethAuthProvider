@@ -152,18 +152,18 @@ namespace ShibbolethAuth
                 Caption = "SAML2p",
             };
 
-//            authServicesOptions.SPOptions.ServiceCertificates.Add(LoadCertificate());
+            authServicesOptions.SPOptions.ServiceCertificates.Add(LoadCertificate());
 
             var ucdShibIdp = new IdentityProvider(
                 new EntityId("urn:mace:incommon:ucdavis.edu"),
                 authServicesOptions.SPOptions)
             {
-                LoadMetadata = true,
+                LoadMetadata = true,                
                 MetadataLocation = "https://shibboleth.ucdavis.edu/idp/shibboleth",
                 AllowUnsolicitedAuthnResponse = true,
             };
-
-            //ucdShibIdp.SigningKeys.AddConfiguredKey(LoadCertificate());
+            
+            ucdShibIdp.SigningKeys.AddConfiguredKey(LoadCertificate());
             authServicesOptions.IdentityProviders.Add(ucdShibIdp);
 
             // Federate against the IdP
@@ -192,7 +192,7 @@ namespace ShibbolethAuth
             attributeConsumingService.RequestedAttributes.Add(new RequestedAttribute("urn:oid:1.3.6.1.4.1.5923.1.1.1.6")
             {
                 FriendlyName = "eduPersonPrincipalName",
-                //AttributeValueXsiType = "ScopedAttributeDecoder",
+                //AttributeValueXsiType = "ScopedAttributeDecoder"
                 //IsRequired = true
             });
 
