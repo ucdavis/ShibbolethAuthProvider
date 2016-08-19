@@ -15,6 +15,7 @@ using Kentor.AuthServices;
 using Kentor.AuthServices.Configuration;
 using Kentor.AuthServices.Metadata;
 using Kentor.AuthServices.Owin;
+using Kentor.AuthServices.Saml2P;
 using Kentor.AuthServices.WebSso;
 using Microsoft.Azure;
 using Microsoft.IdentityModel.Protocols;
@@ -142,6 +143,7 @@ namespace ShibbolethAuth
                 {
                     EntityId = new EntityId(BaseUrl),
                     ReturnUrl = new Uri(BaseUrl),
+                    NameIdPolicy = new Saml2NameIdPolicy(true, NameIdFormat.Persistent),
                     AttributeConsumingServices = { GetAttributeService() },
                     //AuthenticateRequestSigningBehavior = SigningBehavior.Never // TODO: decide what needs to be here in prod
                 },
