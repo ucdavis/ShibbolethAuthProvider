@@ -143,9 +143,9 @@ namespace ShibbolethAuth
                 {
                     EntityId = new EntityId(BaseUrl),
                     ReturnUrl = new Uri(BaseUrl),
-                    NameIdPolicy = new Saml2NameIdPolicy(true, NameIdFormat.EntityIdentifier),
-                    //AttributeConsumingServices = { GetAttributeService() },
-                    //AuthenticateRequestSigningBehavior = SigningBehavior.Never // TODO: decide what needs to be here in prod
+                    AttributeConsumingServices = { GetAttributeService() },
+                    WantAssertionsSigned = true,
+                    AuthenticateRequestSigningBehavior = SigningBehavior.IfIdpWantAuthnRequestsSigned // TODO: decide what needs to be here in prod
                 },
                 SignInAsAuthenticationType = signInAsType,
                 AuthenticationType = "saml2p",
@@ -191,11 +191,9 @@ namespace ShibbolethAuth
 
             attributeConsumingService.RequestedAttributes.Add(new RequestedAttribute("urn:oid:1.3.6.1.4.1.5923.1.1.1.6")
             {
-                FriendlyName = "eppn",
+                FriendlyName = "eduPersonPrincipalName",
                 //IsRequired = true
             });
-
-            attributeConsumingService.RequestedAttributes.Add(new RequestedAttribute("Minimal"));
 
             return attributeConsumingService;
         }
