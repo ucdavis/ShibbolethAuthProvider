@@ -144,15 +144,15 @@ namespace ShibbolethAuth
                     EntityId = new EntityId(BaseUrl),
                     ReturnUrl = new Uri(BaseUrl),
                     AttributeConsumingServices = { GetAttributeService() },
-                    WantAssertionsSigned = true,
-                    AuthenticateRequestSigningBehavior = SigningBehavior.IfIdpWantAuthnRequestsSigned // TODO: decide what needs to be here in prod
+                    //WantAssertionsSigned = true,
+                    //AuthenticateRequestSigningBehavior = SigningBehavior.IfIdpWantAuthnRequestsSigned // TODO: decide what needs to be here in prod
                 },
                 SignInAsAuthenticationType = signInAsType,
                 AuthenticationType = "saml2p",
                 Caption = "SAML2p",
             };
 
-            authServicesOptions.SPOptions.ServiceCertificates.Add(LoadCertificate());
+//            authServicesOptions.SPOptions.ServiceCertificates.Add(LoadCertificate());
 
             var ucdShibIdp = new IdentityProvider(
                 new EntityId("urn:mace:incommon:ucdavis.edu"),
@@ -163,7 +163,7 @@ namespace ShibbolethAuth
                 AllowUnsolicitedAuthnResponse = true,
             };
 
-            ucdShibIdp.SigningKeys.AddConfiguredKey(LoadCertificate());
+            //ucdShibIdp.SigningKeys.AddConfiguredKey(LoadCertificate());
             authServicesOptions.IdentityProviders.Add(ucdShibIdp);
 
             // Federate against the IdP
@@ -192,6 +192,7 @@ namespace ShibbolethAuth
             attributeConsumingService.RequestedAttributes.Add(new RequestedAttribute("urn:oid:1.3.6.1.4.1.5923.1.1.1.6")
             {
                 FriendlyName = "eduPersonPrincipalName",
+                AttributeValueXsiType = "ScopedAttributeDecoder",
                 //IsRequired = true
             });
 
