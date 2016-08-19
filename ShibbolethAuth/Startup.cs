@@ -52,7 +52,12 @@ namespace ShibbolethAuth
             //LogProvider.SetCurrentLogProvider(new DiagnosticsTraceLogProvider());
 
             AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimTypes.Subject;
-            JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
+            //JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
+            JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>
+            {
+                { "sub", "urn:oid:1.3.6.1.4.1.5923.1.1.1.6" },
+                { "given_name", "urn:oid:2.5.4.42" }
+            };
 
             app.Map("/identity", idsrvApp =>
             {
@@ -106,12 +111,6 @@ namespace ShibbolethAuth
 
                         var userInfo = await userInfoClient.GetAsync();
                         userInfo.Claims.ToList().ForEach(ui => nid.AddClaim(new Claim(ui.Item1, ui.Item2)));
-
-                        nid.AddClaim(new Claim(Constants.ClaimTypes.GivenName, "Scotty")); //TODO: test
-
-                        //TODO: testing sub
-                        nid.RemoveClaim(nid.Claims.Single(c => c.Type == Constants.ClaimTypes.Subject));
-                        nid.AddClaim(new Claim(Constants.ClaimTypes.Subject, "srkirkland"));
 
                         // keep the id_token for logout
                         nid.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
