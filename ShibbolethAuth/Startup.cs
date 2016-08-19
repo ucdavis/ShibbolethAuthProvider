@@ -152,18 +152,17 @@ namespace ShibbolethAuth
 
             authServicesOptions.SPOptions.ServiceCertificates.Add(LoadCertificate());
 
-            authServicesOptions.IdentityProviders.Add(new IdentityProvider(
-              new EntityId("urn:mace:incommon:ucdavis.edu"),
-              authServicesOptions.SPOptions)
-            {
-                LoadMetadata = true,
-                MetadataLocation = "https://shibboleth.ucdavis.edu/idp/shibboleth",
-                AllowUnsolicitedAuthnResponse = true,
-                WantAuthnRequestsSigned = true
-            });
+            //authServicesOptions.IdentityProviders.Add(new IdentityProvider(
+            //  new EntityId("urn:mace:incommon:ucdavis.edu"),
+            //  authServicesOptions.SPOptions)
+            //{
+            //    LoadMetadata = true,
+            //    MetadataLocation = "https://shibboleth.ucdavis.edu/idp/shibboleth",
+            //    AllowUnsolicitedAuthnResponse = true,
+            //});
 
             // Federate against the IdP
-            //new Federation(FederationUrl, true, authServicesOptions);
+            new Federation(FederationUrl, true, authServicesOptions);
 
             app.UseKentorAuthServicesAuthentication(authServicesOptions);
 
