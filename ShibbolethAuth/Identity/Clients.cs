@@ -32,6 +32,30 @@ namespace ShibbolethAuth.Identity
                 },
                 new Client
                 {
+                    ClientName  = "Now Mobile",
+                    ClientId = "nowmobile",
+                    Flow = Flows.AuthorizationCode,
+                    AllowedScopes = new List<string>
+                    {
+                        "openid",
+                        "profile",
+                        "saml"
+                    }
+                },
+                new Client
+                {
+                    ClientName  = "Now Mobile",
+                    ClientId = "nowimplicit",
+                    Flow = Flows.Implicit,
+                    AllowedScopes = new List<string>
+                    {
+                        "openid",
+                        "profile",
+                        "saml"
+                    }
+                },
+                new Client
+                {
                     ClientName = "Auth0 Client",
                     ClientId = "auth0",
                     Flow = Flows.AuthorizationCode,
