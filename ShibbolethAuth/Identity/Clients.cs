@@ -53,6 +53,10 @@ namespace ShibbolethAuth.Identity
                     ClientName  = "Now Mobile",
                     ClientId = "nowimplicit",
                     Flow = Flows.Implicit,
+                    RedirectUris = new List<string>
+                    {
+                        "nowmobile://cb"
+                    },
                     AllowedScopes = new List<string>
                     {
                         "openid",
