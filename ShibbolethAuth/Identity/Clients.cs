@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using IdentityServer3.Core;
 using IdentityServer3.Core.Models;
 
 namespace ShibbolethAuth.Identity
@@ -35,6 +36,11 @@ namespace ShibbolethAuth.Identity
                     ClientName  = "Now Mobile",
                     ClientId = "nowmobile",
                     Flow = Flows.AuthorizationCode,
+                    ClientSecrets = new List<Secret> { new Secret("secret".Sha256()) },
+                    RedirectUris = new List<string>
+                    {
+                        "nowmobile://cb"
+                    },
                     AllowedScopes = new List<string>
                     {
                         "openid",
