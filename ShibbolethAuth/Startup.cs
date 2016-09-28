@@ -113,6 +113,17 @@ namespace ShibbolethAuth
                         var userInfo = await userInfoClient.GetAsync();
                         userInfo.Claims.ToList().ForEach(ui => nid.AddClaim(new Claim(ui.Item1, ui.Item2)));
 
+                        var familyClaim = userInfo.Claims.FirstOrDefault(c => c.Item1 == "urn:oid:2.5.4.4");
+
+                        if (familyClaim != null)
+                        {
+                            nid.AddClaim(new Claim(Constants.ClaimTypes.FamilyName, familyClaim.Item2));
+                        }
+                        else
+                        {
+                            nid.AddClaim(new Claim(Constants.ClaimTypes.FamilyName, "unknown"));
+                        }
+
                         // keep the id_token for logout
                         nid.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
 
