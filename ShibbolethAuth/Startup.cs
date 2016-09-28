@@ -56,6 +56,7 @@ namespace ShibbolethAuth
             JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>
             {
                 { "sub", "urn:oid:1.3.6.1.4.1.5923.1.1.1.6" },
+                { "urn:oid:2.5.4.4", Constants.ClaimTypes.FamilyName },
                 { "given_name", "urn:oid:2.5.4.42" }
             };
 
