@@ -31,6 +31,19 @@ namespace ShibbolethAuth.Identity
                         "saml"
                     }
                 },
+                new Client()
+                {
+                    ClientName = "Core Tester",
+                    ClientId = "coreauth",
+                    Flow = Flows.Implicit,
+                    RedirectUris = new List<string>() { "https://localhost:44370/signin-oidc" },
+                    AllowedScopes = new List<string>
+                    {
+                        "openid",
+                        "profile",
+                        "saml"
+                    }
+                },
                 new Client
                 {
                     ClientName  = "Now Mobile",
