@@ -42,6 +42,7 @@ namespace ShibbolethAuth.Identity
                     {
                         "openid",
                         "profile",
+                        "email",
                         "saml"
                     }
                 },
