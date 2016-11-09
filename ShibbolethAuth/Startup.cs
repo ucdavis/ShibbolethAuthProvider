@@ -196,7 +196,19 @@ namespace ShibbolethAuth
                 AuthenticationType = "saml2p",
                 Caption = "SAML2p",
             };
-            
+
+            authServicesOptions.Notifications.SignInCommandResultCreated = (result, dictionary) =>
+            {
+                foreach (var identity in result.Principal.Identities)
+                {
+                    identity.AddClaim(new Claim(Constants.ClaimTypes.Gender, "M"));
+                    identity.AddClaim(new Claim(Constants.ClaimTypes.FamilyName, "FamilNameHere"));
+                    identity.AddClaim(new Claim(Constants.ClaimTypes.Email, "fakeemail@mail.com"));
+                    //identity.AddClaim(new Claim(ClaimTypes.Surname, "LastNameHere"));
+                    //identity.AddClaim(new Claim(ClaimTypes.GivenName, "FirstNameHere"));
+                }
+            };
+
             authServicesOptions.SPOptions.ServiceCertificates.Add(LoadCertificate());
 
             var ucdShibIdp = new IdentityProvider(
