@@ -180,8 +180,9 @@ namespace ShibbolethAuth
                     {
                         foreach (var identity in result.Principal.Identities)
                         {
-                            identity.AddClaim(new Claim(ClaimTypes.Surname, "LastNameHere"));
-                            identity.AddClaim(new Claim(ClaimTypes.GivenName, "FirstNameHere"));
+                            identity.AddClaim(new Claim(Constants.ClaimTypes.FamilyName, "FamilNameHere"));
+                            //identity.AddClaim(new Claim(ClaimTypes.Surname, "LastNameHere"));
+                            //identity.AddClaim(new Claim(ClaimTypes.GivenName, "FirstNameHere"));
                         }
                         //var openc = new List<Claim>()
                         //{
