@@ -359,6 +359,16 @@ namespace ShibbolethAuth
         {
             foreach (var identity in incomingPrincipal.Identities)
             {
+                var givenName = identity.Claims.FirstOrDefault(c => c.Type == "urn:oid:2.5.4.42");
+
+                if (givenName != null)
+                {
+                    identity.AddClaim(new Claim(Constants.ClaimTypes.GivenName, givenName.Value));
+                }
+                else
+                {
+                    identity.AddClaim(new Claim(Constants.ClaimTypes.GivenName, "Claim not found"));
+                }
                 identity.AddClaim(new Claim(Constants.ClaimTypes.Gender, "M"));
                 identity.AddClaim(new Claim(Constants.ClaimTypes.FamilyName, "FamilNameHere"));
                 identity.AddClaim(new Claim(Constants.ClaimTypes.Email, "fakeemail@mail.com"));
