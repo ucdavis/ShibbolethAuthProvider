@@ -59,6 +59,13 @@ namespace ShibbolethAuth
                 { "urn:oid:2.5.4.4", Constants.ClaimTypes.FamilyName },
                 { "given_name", "urn:oid:2.5.4.42" }
             };
+            JwtSecurityTokenHandler.OutboundClaimTypeMap = new Dictionary<string, string>
+            {
+                { "sub", "urn:oid:1.3.6.1.4.1.5923.1.1.1.6" },
+                { "urn:oid:2.5.4.4", Constants.ClaimTypes.FamilyName },
+                { "given_name", "urn:oid:2.5.4.42" }
+            };
+
 
             app.Map("/identity", idsrvApp =>
             {
@@ -71,7 +78,7 @@ namespace ShibbolethAuth
                     .UseInMemoryUsers(Users.Get())
                     .UseInMemoryClients(Clients.Get())
                     .UseInMemoryScopes(Scopes.Get()),
-
+                    
                     AuthenticationOptions = new AuthenticationOptions
                     {
                         EnablePostSignOutAutoRedirect = true,
@@ -197,17 +204,19 @@ namespace ShibbolethAuth
                 Caption = "SAML2p",
             };
 
-            authServicesOptions.Notifications.SignInCommandResultCreated += (result, dictionary) =>
-            {
-                foreach (var identity in result.Principal.Identities)
-                {
-                    identity.AddClaim(new Claim(Constants.ClaimTypes.Gender, "M"));
-                    identity.AddClaim(new Claim(Constants.ClaimTypes.FamilyName, "FamilNameHere"));
-                    identity.AddClaim(new Claim(Constants.ClaimTypes.Email, "fakeemail@mail.com"));
-                    //identity.AddClaim(new Claim(ClaimTypes.Surname, "LastNameHere"));
-                    //identity.AddClaim(new Claim(ClaimTypes.GivenName, "FirstNameHere"));
-                }
-            };
+            //authServicesOptions.Notifications.SignInCommandResultCreated = (result, dictionary) => { };
+
+            //authServicesOptions.Notifications.SignInCommandResultCreated += (result, dictionary) =>
+            //{
+            //    foreach (var identity in result.Principal.Identities)
+            //    {
+            //        identity.AddClaim(new Claim(Constants.ClaimTypes.Gender, "M"));
+            //        identity.AddClaim(new Claim(Constants.ClaimTypes.FamilyName, "FamilNameHere"));
+            //        identity.AddClaim(new Claim(Constants.ClaimTypes.Email, "fakeemail@mail.com"));
+            //        //identity.AddClaim(new Claim(ClaimTypes.Surname, "LastNameHere"));
+            //        //identity.AddClaim(new Claim(ClaimTypes.GivenName, "FirstNameHere"));
+            //    }
+            //};
 
             authServicesOptions.SPOptions.ServiceCertificates.Add(LoadCertificate());
 
