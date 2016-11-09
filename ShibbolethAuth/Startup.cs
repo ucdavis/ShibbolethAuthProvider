@@ -197,7 +197,7 @@ namespace ShibbolethAuth
                 Caption = "SAML2p",
             };
 
-            authServicesOptions.Notifications.SignInCommandResultCreated = (result, dictionary) =>
+            authServicesOptions.Notifications.SignInCommandResultCreated += (result, dictionary) =>
             {
                 foreach (var identity in result.Principal.Identities)
                 {
