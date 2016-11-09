@@ -174,6 +174,21 @@ namespace ShibbolethAuth
                     //WantAssertionsSigned = true,
                     //AuthenticateRequestSigningBehavior = SigningBehavior.IfIdpWantAuthnRequestsSigned // TODO: decide what needs to be here in prod
                 },
+                Notifications = new KentorAuthServicesNotifications()
+                {
+                    SignInCommandResultCreated = (result, dictionary) =>
+                    {
+                        foreach (var identity in result.Principal.Identities)
+                        {
+                            identity.AddClaim(new Claim(Constants.ClaimTypes.FamilyName, "LastNameHere"));
+                        }
+                        //var openc = new List<Claim>()
+                        //{
+                        //    new Claim(Constants.ClaimTypes.FamilyName,
+                        //        claims.Single(c => c.Type == "sdfhasdjklfh").Value)
+                        //};                        
+                    }
+                },
                 SignInAsAuthenticationType = signInAsType,
                 AuthenticationType = "saml2p",
                 Caption = "SAML2p",
@@ -185,7 +200,7 @@ namespace ShibbolethAuth
                 new EntityId("urn:mace:incommon:ucdavis.edu"),
                 authServicesOptions.SPOptions)
             {
-                LoadMetadata = true,                
+                LoadMetadata = true,
                 MetadataLocation = "https://shibboleth.ucdavis.edu/idp/shibboleth",
                 AllowUnsolicitedAuthnResponse = true,
             };
@@ -220,7 +235,7 @@ namespace ShibbolethAuth
             attributeConsumingService.RequestedAttributes.Add(new RequestedAttribute("urn:oid:1.3.6.1.4.1.5923.1.1.1.6")
             {
                 FriendlyName = "eduPersonPrincipalName",
-                NameFormat = new Uri("urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+                NameFormat = new Uri("urn:oasis:names:tc:SAML:2.0:attrname-format:uri"),          
                 //AttributeValueXsiType = "ScopedAttributeDecoder"
                 //IsRequired = true
             });
