@@ -174,24 +174,24 @@ namespace ShibbolethAuth
                     //WantAssertionsSigned = true,
                     //AuthenticateRequestSigningBehavior = SigningBehavior.IfIdpWantAuthnRequestsSigned // TODO: decide what needs to be here in prod
                 },
-                Notifications = new KentorAuthServicesNotifications()
-                {
-                    SignInCommandResultCreated = (result, dictionary) =>
-                    {
-                        foreach (var identity in result.Principal.Identities)
-                        {
-                            identity.AddClaim(new Claim(Constants.ClaimTypes.Gender, "M"));
-                            identity.AddClaim(new Claim(Constants.ClaimTypes.FamilyName, "FamilNameHere"));
-                            //identity.AddClaim(new Claim(ClaimTypes.Surname, "LastNameHere"));
-                            //identity.AddClaim(new Claim(ClaimTypes.GivenName, "FirstNameHere"));
-                        }
-                        //var openc = new List<Claim>()
-                        //{
-                        //    new Claim(Constants.ClaimTypes.FamilyName,
-                        //        claims.Single(c => c.Type == "sdfhasdjklfh").Value)
-                        //};                        
-                    }
-                },
+                //Notifications = new KentorAuthServicesNotifications()
+                //{
+                //    SignInCommandResultCreated = (result, dictionary) =>
+                //    {
+                //        foreach (var identity in result.Principal.Identities)
+                //        {
+                //            identity.AddClaim(new Claim(Constants.ClaimTypes.Gender, "M"));
+                //            identity.AddClaim(new Claim(Constants.ClaimTypes.FamilyName, "FamilNameHere"));
+                //            //identity.AddClaim(new Claim(ClaimTypes.Surname, "LastNameHere"));
+                //            //identity.AddClaim(new Claim(ClaimTypes.GivenName, "FirstNameHere"));
+                //        }
+                //        //var openc = new List<Claim>()
+                //        //{
+                //        //    new Claim(Constants.ClaimTypes.FamilyName,
+                //        //        claims.Single(c => c.Type == "sdfhasdjklfh").Value)
+                //        //};                        
+                //    }
+                //},
                 SignInAsAuthenticationType = signInAsType,
                 AuthenticationType = "saml2p",
                 Caption = "SAML2p",
