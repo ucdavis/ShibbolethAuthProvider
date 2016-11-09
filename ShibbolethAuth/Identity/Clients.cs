@@ -36,7 +36,7 @@ namespace ShibbolethAuth.Identity
                     ClientName = "Core Tester",
                     ClientId = "coreauth",
                     Flow = Flows.Implicit,
-                    RequireConsent = false,
+                    //RequireConsent = false,
                     RedirectUris = new List<string>() { "https://localhost:44370/signin-oidc" },
                     AllowedScopes = new List<string>
                     {
