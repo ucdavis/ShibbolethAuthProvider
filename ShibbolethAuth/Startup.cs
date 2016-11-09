@@ -178,13 +178,13 @@ namespace ShibbolethAuth
                 {
                     SignInCommandResultCreated = (result, dictionary) =>
                     {
-                        //foreach (var identity in result.Principal.Identities)
-                        //{
-                        //    identity.AddClaim(new Claim(Constants.ClaimTypes.Gender, "M"));
-                        //    identity.AddClaim(new Claim(Constants.ClaimTypes.FamilyName, "FamilNameHere"));
-                        //    //identity.AddClaim(new Claim(ClaimTypes.Surname, "LastNameHere"));
-                        //    //identity.AddClaim(new Claim(ClaimTypes.GivenName, "FirstNameHere"));
-                        //}
+                        foreach (var identity in result.Principal.Identities)
+                        {
+                            identity.AddClaim(new Claim(Constants.ClaimTypes.Gender, "M"));
+                            identity.AddClaim(new Claim(Constants.ClaimTypes.FamilyName, "FamilNameHere"));
+                            //identity.AddClaim(new Claim(ClaimTypes.Surname, "LastNameHere"));
+                            //identity.AddClaim(new Claim(ClaimTypes.GivenName, "FirstNameHere"));
+                        }
                         //var openc = new List<Claim>()
                         //{
                         //    new Claim(Constants.ClaimTypes.FamilyName,
