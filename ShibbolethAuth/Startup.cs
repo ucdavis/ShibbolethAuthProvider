@@ -204,6 +204,10 @@ namespace ShibbolethAuth
                 Caption = "SAML2p",
             };
 
+            // Testing using custom claims manager https://github.com/KentorIT/authservices/blob/master/doc/ClaimsAuthenticationManager.md
+            authServicesOptions.SPOptions.SystemIdentityModelIdentityConfiguration.ClaimsAuthenticationManager =
+                new CustomClaims();
+
             //authServicesOptions.Notifications.SignInCommandResultCreated = (result, dictionary) => { };
 
             //authServicesOptions.Notifications.SignInCommandResultCreated += (result, dictionary) =>
@@ -346,6 +350,22 @@ namespace ShibbolethAuth
             }
             certStore.Close();
             return certificate;
+        }
+    }
+
+    public class CustomClaims : ClaimsAuthenticationManager
+    {
+        public override ClaimsPrincipal Authenticate(string resourceName, ClaimsPrincipal incomingPrincipal)
+        {
+            foreach (var identity in incomingPrincipal.Identities)
+            {
+                identity.AddClaim(new Claim(Constants.ClaimTypes.Gender, "M"));
+                identity.AddClaim(new Claim(Constants.ClaimTypes.FamilyName, "FamilNameHere"));
+                identity.AddClaim(new Claim(Constants.ClaimTypes.Email, "fakeemail@mail.com"));
+                //identity.AddClaim(new Claim(ClaimTypes.Surname, "LastNameHere"));
+                //identity.AddClaim(new Claim(ClaimTypes.GivenName, "FirstNameHere"));
+            }
+            return base.Authenticate(resourceName, incomingPrincipal);
         }
     }
 }
