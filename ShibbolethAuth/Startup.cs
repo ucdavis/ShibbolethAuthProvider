@@ -357,10 +357,10 @@ namespace ShibbolethAuth
     {
         public override ClaimsPrincipal Authenticate(string resourceName, ClaimsPrincipal incomingPrincipal)
         {
-            foreach (var identity in incomingPrincipal.Identities)
-            {
-                identity.AddClaims(Claims.ConvertToOauthClaims(identity.Claims.ToArray()));
-            }
+            //foreach (var identity in incomingPrincipal.Identities)
+            //{
+            //    identity.AddClaims(Claims.ConvertToOauthClaims(identity.Claims.ToArray()));
+            //}
 
             return base.Authenticate(resourceName, incomingPrincipal);
         }
