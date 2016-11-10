@@ -53,18 +53,18 @@ namespace ShibbolethAuth
 
             AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimTypes.Subject;
             //JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
-            JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>
-            {
-                { "sub", "urn:oid:1.3.6.1.4.1.5923.1.1.1.6" },
-                { "urn:oid:2.5.4.4", Constants.ClaimTypes.FamilyName },
-                { "given_name", "urn:oid:2.5.4.42" }
-            };
-            JwtSecurityTokenHandler.OutboundClaimTypeMap = new Dictionary<string, string>
-            {
-                { "sub", "urn:oid:1.3.6.1.4.1.5923.1.1.1.6" },
-                { "urn:oid:2.5.4.4", Constants.ClaimTypes.FamilyName },
-                { "given_name", "urn:oid:2.5.4.42" }
-            };
+            //JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>
+            //{
+            //    { "sub", "urn:oid:1.3.6.1.4.1.5923.1.1.1.6" },
+            //    { "urn:oid:2.5.4.4", Constants.ClaimTypes.FamilyName },
+            //    { "given_name", "urn:oid:2.5.4.42" }
+            //};
+            //JwtSecurityTokenHandler.OutboundClaimTypeMap = new Dictionary<string, string>
+            //{
+            //    { "sub", "urn:oid:1.3.6.1.4.1.5923.1.1.1.6" },
+            //    { "urn:oid:2.5.4.4", Constants.ClaimTypes.FamilyName },
+            //    { "given_name", "urn:oid:2.5.4.42" }
+            //};
 
 
             app.Map("/identity", idsrvApp =>
@@ -359,22 +359,9 @@ namespace ShibbolethAuth
         {
             foreach (var identity in incomingPrincipal.Identities)
             {
-                var givenName = identity.Claims.FirstOrDefault(c => c.Type == "urn:oid:2.5.4.42");
-
-                if (givenName != null)
-                {
-                    identity.AddClaim(new Claim(Constants.ClaimTypes.GivenName, givenName.Value));
-                }
-                else
-                {
-                    identity.AddClaim(new Claim(Constants.ClaimTypes.GivenName, "Claim not found"));
-                }
-                identity.AddClaim(new Claim(Constants.ClaimTypes.Gender, "M"));
-                identity.AddClaim(new Claim(Constants.ClaimTypes.FamilyName, "FamilNameHere"));
-                identity.AddClaim(new Claim(Constants.ClaimTypes.Email, "fakeemail@mail.com"));
-                //identity.AddClaim(new Claim(ClaimTypes.Surname, "LastNameHere"));
-                //identity.AddClaim(new Claim(ClaimTypes.GivenName, "FirstNameHere"));
+                identity.AddClaims(Claims.ConvertToOauthClaims(identity.Claims.ToArray()));
             }
+
             return base.Authenticate(resourceName, incomingPrincipal);
         }
     }

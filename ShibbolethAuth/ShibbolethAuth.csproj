@@ -177,6 +177,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Identity\Claims.cs" />
     <Compile Include="Identity\Clients.cs" />
     <Compile Include="Identity\Scopes.cs" />
     <Compile Include="Identity\Users.cs" />
