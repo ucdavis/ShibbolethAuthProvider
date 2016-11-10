@@ -365,6 +365,11 @@ namespace ShibbolethAuth
                 var subClaim = claims.FirstOrDefault(c => string.Equals(c.Type, Constants.ClaimTypes.Subject));
 
                 if (subClaim != null && identity.HasClaim(subClaim.Type, subClaim.Value)) { identity.RemoveClaim(subClaim); }
+         
+                // first remove the sub claim which we'll replace
+                var idClaim = claims.FirstOrDefault(c => string.Equals(c.Type, Constants.ClaimTypes.Id));
+
+                if (idClaim != null && identity.HasClaim(idClaim.Type, idClaim.Value)) { identity.RemoveClaim(idClaim); }
                 
                 // now add in the converted oauth claims
                 identity.AddClaims(Claims.ConvertToOauthClaims(claims));                
