@@ -97,7 +97,7 @@ namespace ShibbolethAuth
             {
                 Authority = BaseUrl + "identity",
                 ClientId = "web",
-                Scope = "openid saml",
+                Scope = "openid profile email saml",
                 ResponseType = "id_token token",
                 RedirectUri = BaseUrl,
                 SignInAsAuthenticationType = "Cookies",
@@ -357,10 +357,18 @@ namespace ShibbolethAuth
     {
         public override ClaimsPrincipal Authenticate(string resourceName, ClaimsPrincipal incomingPrincipal)
         {
-            //foreach (var identity in incomingPrincipal.Identities)
-            //{
-            //    identity.AddClaims(Claims.ConvertToOauthClaims(identity.Claims.ToArray()));
-            //}
+            foreach (var identity in incomingPrincipal.Identities)
+            {
+                var claims = identity.Claims.ToArray();
+
+                // first remove the sub claim which we'll replace
+                var subClaim = claims.FirstOrDefault(c => string.Equals(c.Type, Constants.ClaimTypes.Subject));
+
+                if (subClaim != null && identity.HasClaim(subClaim.Type, subClaim.Value)) { identity.RemoveClaim(subClaim); }
+                
+                // now add in the converted oauth claims
+                identity.AddClaims(Claims.ConvertToOauthClaims(claims));                
+            }
 
             return base.Authenticate(resourceName, incomingPrincipal);
         }
