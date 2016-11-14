@@ -15,7 +15,9 @@ namespace ShibbolethAuth.Identity
             {"urn:oid:1.3.6.1.4.1.5923.1.1.1.2", Constants.ClaimTypes.NickName}, //eduPersonNickname
             {"urn:oid:2.16.840.1.113730.3.1.241", Constants.ClaimTypes.Name}, //displayName
             {"urn:oid:0.9.2342.19200300.100.1.3", Constants.ClaimTypes.Email}, //mail
-            {"urn:oid:1.3.6.1.4.1.5923.1.1.1.6", "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"}, //eduPersonPrincipalName
+            //{"urn:oid:1.3.6.1.4.1.5923.1.1.1.6", "user_id"}, //eduPersonPrincipalName
+            {"urn:oid:1.3.6.1.4.1.5923.1.1.1.6", Constants.ClaimTypes.PreferredUserName}, //eduPersonPrincipalName
+            //{"urn:oid:1.3.6.1.4.1.5923.1.1.1.6", "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"}, //eduPersonPrincipalName
             //{"urn:oid:1.3.6.1.4.1.5923.1.1.1.6", Constants.ClaimTypes.ExternalProviderUserId}, //eduPersonPrincipalName
             //{"urn:oid:1.3.6.1.4.1.5923.1.1.1.6", Constants.ClaimTypes.ClientId}, //eduPersonPrincipalName
             //{"urn:oid:1.3.6.1.4.1.5923.1.1.1.6", Constants.ClaimTypes.Id}, //eduPersonPrincipalName

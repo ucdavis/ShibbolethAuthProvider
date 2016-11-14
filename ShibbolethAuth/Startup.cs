@@ -368,9 +368,9 @@ namespace ShibbolethAuth
                 //if (subClaim != null && identity.HasClaim(subClaim.Type, subClaim.Value)) { identity.RemoveClaim(subClaim); }
 
                 // first remove the nameClaim claim which we'll replace
-                var nameClaim = claims.FirstOrDefault(c => string.Equals(c.Type, nameIdentifier));
+                //var nameClaim = claims.FirstOrDefault(c => string.Equals(c.Type, nameIdentifier));
 
-                if (nameClaim != null && identity.HasClaim(nameClaim.Type, nameClaim.Value)) { identity.RemoveClaim(nameClaim); }
+                //if (nameClaim != null && identity.HasClaim(nameClaim.Type, nameClaim.Value)) { identity.RemoveClaim(nameClaim); }
          
                 //// remove the id claim which we'll replace
                 //var idClaim = claims.FirstOrDefault(c => string.Equals(c.Type, Constants.ClaimTypes.Id));
