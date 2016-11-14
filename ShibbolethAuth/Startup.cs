@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IdentityModel.Metadata;
-using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Helpers;
 using IdentityModel.Client;
 using IdentityServer3.Core;
@@ -16,8 +12,6 @@ using Kentor.AuthServices;
 using Kentor.AuthServices.Configuration;
 using Kentor.AuthServices.Metadata;
 using Kentor.AuthServices.Owin;
-using Kentor.AuthServices.Saml2P;
-using Kentor.AuthServices.WebSso;
 using Microsoft.Azure;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Owin;
@@ -52,20 +46,6 @@ namespace ShibbolethAuth
             //LogProvider.SetCurrentLogProvider(new DiagnosticsTraceLogProvider());
 
             AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimTypes.Subject;
-            //JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
-            //JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>
-            //{
-            //    { "sub", "urn:oid:1.3.6.1.4.1.5923.1.1.1.6" },
-            //    { "urn:oid:2.5.4.4", Constants.ClaimTypes.FamilyName },
-            //    { "given_name", "urn:oid:2.5.4.42" }
-            //};
-            //JwtSecurityTokenHandler.OutboundClaimTypeMap = new Dictionary<string, string>
-            //{
-            //    { "sub", "urn:oid:1.3.6.1.4.1.5923.1.1.1.6" },
-            //    { "urn:oid:2.5.4.4", Constants.ClaimTypes.FamilyName },
-            //    { "given_name", "urn:oid:2.5.4.42" }
-            //};
-
 
             app.Map("/identity", idsrvApp =>
             {
@@ -120,17 +100,6 @@ namespace ShibbolethAuth
                         var userInfo = await userInfoClient.GetAsync();
                         userInfo.Claims.ToList().ForEach(ui => nid.AddClaim(new Claim(ui.Item1, ui.Item2)));
 
-                        var familyClaim = userInfo.Claims.FirstOrDefault(c => c.Item1 == "urn:oid:2.5.4.4");
-
-                        if (familyClaim != null)
-                        {
-                            nid.AddClaim(new Claim(Constants.ClaimTypes.FamilyName, familyClaim.Item2));
-                        }
-                        else
-                        {
-                            nid.AddClaim(new Claim(Constants.ClaimTypes.FamilyName, "unknown"));
-                        }
-
                         // keep the id_token for logout
                         nid.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
 
@@ -142,8 +111,6 @@ namespace ShibbolethAuth
 
                         // add some other app specific claim
                         nid.AddClaim(new Claim("app_specific", "some data"));
-
-
                         
                         n.AuthenticationTicket = new AuthenticationTicket(
                             nid,
@@ -181,46 +148,14 @@ namespace ShibbolethAuth
                     //WantAssertionsSigned = true,
                     //AuthenticateRequestSigningBehavior = SigningBehavior.IfIdpWantAuthnRequestsSigned // TODO: decide what needs to be here in prod
                 },
-                //Notifications = new KentorAuthServicesNotifications()
-                //{
-                //    SignInCommandResultCreated = (result, dictionary) =>
-                //    {
-                //        foreach (var identity in result.Principal.Identities)
-                //        {
-                //            identity.AddClaim(new Claim(Constants.ClaimTypes.Gender, "M"));
-                //            identity.AddClaim(new Claim(Constants.ClaimTypes.FamilyName, "FamilNameHere"));
-                //            //identity.AddClaim(new Claim(ClaimTypes.Surname, "LastNameHere"));
-                //            //identity.AddClaim(new Claim(ClaimTypes.GivenName, "FirstNameHere"));
-                //        }
-                //        //var openc = new List<Claim>()
-                //        //{
-                //        //    new Claim(Constants.ClaimTypes.FamilyName,
-                //        //        claims.Single(c => c.Type == "sdfhasdjklfh").Value)
-                //        //};                        
-                //    }
-                //},
                 SignInAsAuthenticationType = signInAsType,
                 AuthenticationType = "saml2p",
                 Caption = "SAML2p",
             };
 
-            // Testing using custom claims manager https://github.com/KentorIT/authservices/blob/master/doc/ClaimsAuthenticationManager.md
+            // Map claims Shibboleth->OIDC using a custom claims manager: https://github.com/KentorIT/authservices/blob/master/doc/ClaimsAuthenticationManager.md
             authServicesOptions.SPOptions.SystemIdentityModelIdentityConfiguration.ClaimsAuthenticationManager =
-                new CustomClaims();
-
-            //authServicesOptions.Notifications.SignInCommandResultCreated = (result, dictionary) => { };
-
-            //authServicesOptions.Notifications.SignInCommandResultCreated += (result, dictionary) =>
-            //{
-            //    foreach (var identity in result.Principal.Identities)
-            //    {
-            //        identity.AddClaim(new Claim(Constants.ClaimTypes.Gender, "M"));
-            //        identity.AddClaim(new Claim(Constants.ClaimTypes.FamilyName, "FamilNameHere"));
-            //        identity.AddClaim(new Claim(Constants.ClaimTypes.Email, "fakeemail@mail.com"));
-            //        //identity.AddClaim(new Claim(ClaimTypes.Surname, "LastNameHere"));
-            //        //identity.AddClaim(new Claim(ClaimTypes.GivenName, "FirstNameHere"));
-            //    }
-            //};
+                new ShibbolethClaimsMapper();
 
             authServicesOptions.SPOptions.ServiceCertificates.Add(LoadCertificate());
 
@@ -240,16 +175,6 @@ namespace ShibbolethAuth
             //new Federation(FederationUrl, true, authServicesOptions);
 
             app.UseKentorAuthServicesAuthentication(authServicesOptions);
-            
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions
-            //{
-            //    AuthenticationType = "Google",
-            //    Caption = "Sign-in with Google",
-            //    SignInAsAuthenticationType = signInAsType,
-
-            //    ClientId = "701386055558-9epl93fgsjfmdn14frqvaq2r9i44qgaa.apps.googleusercontent.com",
-            //    ClientSecret = "3pyawKDWaXwsPuRDL7LtKm_o"
-            //});
         }
 
         AttributeConsumingService GetAttributeService()
@@ -350,43 +275,6 @@ namespace ShibbolethAuth
             }
             certStore.Close();
             return certificate;
-        }
-    }
-
-    public class CustomClaims : ClaimsAuthenticationManager
-    {
-        public override ClaimsPrincipal Authenticate(string resourceName, ClaimsPrincipal incomingPrincipal)
-        {
-            const string nameIdentifier = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
-            foreach (var identity in incomingPrincipal.Identities)
-            {
-                var claims = identity.Claims.ToArray();
-
-                // first remove the sub claim which we'll replace
-                //var subClaim = claims.FirstOrDefault(c => string.Equals(c.Type, Constants.ClaimTypes.Subject));
-
-                //if (subClaim != null && identity.HasClaim(subClaim.Type, subClaim.Value)) { identity.RemoveClaim(subClaim); }
-
-                // first remove the nameClaim claim which we'll replace
-                //var nameClaim = claims.FirstOrDefault(c => string.Equals(c.Type, nameIdentifier));
-
-                //if (nameClaim != null && identity.HasClaim(nameClaim.Type, nameClaim.Value)) { identity.RemoveClaim(nameClaim); }
-         
-                //// remove the id claim which we'll replace
-                //var idClaim = claims.FirstOrDefault(c => string.Equals(c.Type, Constants.ClaimTypes.Id));
-
-                //if (idClaim != null && identity.HasClaim(idClaim.Type, idClaim.Value)) { identity.RemoveClaim(idClaim); }
-                
-                //// first clientid claim which we'll replace
-                //var clientIdClaim = claims.FirstOrDefault(c => string.Equals(c.Type, Constants.ClaimTypes.ClientId));
-
-                //if (clientIdClaim != null && identity.HasClaim(clientIdClaim.Type, clientIdClaim.Value)) { identity.RemoveClaim(clientIdClaim); }
-                
-                // now add in the converted oauth claims
-                identity.AddClaims(Claims.ConvertToOauthClaims(claims));                
-            }
-
-            return base.Authenticate(resourceName, incomingPrincipal);
         }
     }
 }
