@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Web;
 using IdentityServer3.Core;
 
 namespace ShibbolethAuth.Identity
@@ -17,10 +15,10 @@ namespace ShibbolethAuth.Identity
             {"urn:oid:1.3.6.1.4.1.5923.1.1.1.2", Constants.ClaimTypes.NickName}, //eduPersonNickname
             {"urn:oid:2.16.840.1.113730.3.1.241", Constants.ClaimTypes.Name}, //displayName
             {"urn:oid:0.9.2342.19200300.100.1.3", Constants.ClaimTypes.Email}, //mail
-            {"urn:oid:1.3.6.1.4.1.5923.1.1.1.6", Constants.ClaimTypes.ExternalProviderUserId}, //eduPersonPrincipalName
+            //{"urn:oid:1.3.6.1.4.1.5923.1.1.1.6", Constants.ClaimTypes.ExternalProviderUserId}, //eduPersonPrincipalName
             //{"urn:oid:1.3.6.1.4.1.5923.1.1.1.6", Constants.ClaimTypes.ClientId}, //eduPersonPrincipalName
             //{"urn:oid:1.3.6.1.4.1.5923.1.1.1.6", Constants.ClaimTypes.Id}, //eduPersonPrincipalName
-            //{"urn:oid:1.3.6.1.4.1.5923.1.1.1.6", Constants.ClaimTypes.Subject}, //eduPersonPrincipalName
+            {"urn:oid:1.3.6.1.4.1.5923.1.1.1.6", Constants.ClaimTypes.Subject}, //eduPersonPrincipalName
         };
 
         /// <summary>
