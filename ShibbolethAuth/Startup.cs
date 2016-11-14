@@ -357,14 +357,20 @@ namespace ShibbolethAuth
     {
         public override ClaimsPrincipal Authenticate(string resourceName, ClaimsPrincipal incomingPrincipal)
         {
+            const string nameIdentifier = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
             foreach (var identity in incomingPrincipal.Identities)
             {
                 var claims = identity.Claims.ToArray();
 
                 // first remove the sub claim which we'll replace
-                var subClaim = claims.FirstOrDefault(c => string.Equals(c.Type, Constants.ClaimTypes.Subject));
+                //var subClaim = claims.FirstOrDefault(c => string.Equals(c.Type, Constants.ClaimTypes.Subject));
 
-                if (subClaim != null && identity.HasClaim(subClaim.Type, subClaim.Value)) { identity.RemoveClaim(subClaim); }
+                //if (subClaim != null && identity.HasClaim(subClaim.Type, subClaim.Value)) { identity.RemoveClaim(subClaim); }
+
+                // first remove the nameClaim claim which we'll replace
+                var nameClaim = claims.FirstOrDefault(c => string.Equals(c.Type, nameIdentifier));
+
+                if (nameClaim != null && identity.HasClaim(nameClaim.Type, nameClaim.Value)) { identity.RemoveClaim(nameClaim); }
          
                 //// remove the id claim which we'll replace
                 //var idClaim = claims.FirstOrDefault(c => string.Equals(c.Type, Constants.ClaimTypes.Id));
