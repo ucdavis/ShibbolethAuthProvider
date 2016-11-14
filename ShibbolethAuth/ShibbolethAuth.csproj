@@ -182,6 +182,7 @@
     <Compile Include="Identity\Scopes.cs" />
     <Compile Include="Identity\Users.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShibbolethClaimsMapper.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
