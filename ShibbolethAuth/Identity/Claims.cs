@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using IdentityServer3.Core;
@@ -36,6 +37,13 @@ namespace ShibbolethAuth.Identity
                     oauthClaims.Add(new Claim(claimMapItem.Value, shibbolethClaim.Value));
                 }
             }
+
+            // now add any role claims
+            var roleClaims =
+                claims.Where(
+                    c => string.Equals(c.Type, "urn:oid:1.3.6.1.4.1.5923.1.1.1.9", StringComparison.OrdinalIgnoreCase));
+
+            oauthClaims.AddRange(roleClaims.Select(claim => new Claim(Constants.ClaimTypes.Role, claim.Value)));
 
             return oauthClaims;
         }
