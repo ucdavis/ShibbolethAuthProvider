@@ -40,14 +40,6 @@ namespace ShibbolethAuth.Identity
                     RequireConsent = false,
                     RedirectUris = new List<string>() { "https://localhost:44370/signin-oidc" },
                     AllowAccessToAllScopes = true,
-                    //AllowedScopes = new List<string>
-                    //{
-                    //    "openid",
-                    //    "profile",
-                    //    "email",
-                    //    "role",
-                    //    "saml"
-                    //}
                 },
                 new Client
                 {

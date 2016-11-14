@@ -26,13 +26,6 @@ using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationO
 
 namespace ShibbolethAuth
 {
-    public class CAM : ClaimsAuthenticationManager
-    {
-        public CAM() : base()
-        {
-           
-        }
-    }
     public class Startup
     {
         public static readonly string BaseUrl = CloudConfigurationManager.GetSetting("BaseUrl");
