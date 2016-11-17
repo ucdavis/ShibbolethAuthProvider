@@ -41,6 +41,15 @@ namespace ShibbolethAuth.Identity
                     RedirectUris = new List<string>() { "https://localhost:44370/signin-oidc" },
                     AllowAccessToAllScopes = true,
                 },
+                new Client()
+                {
+                    ClientName = "Campus Tester",
+                    ClientId = "CampusCasOauth",
+                    Flow = Flows.Implicit,
+                    RequireConsent = false,
+                    RedirectUris = new List<string>() { "https://localhost:44316/signin-oidc" },
+                    AllowAccessToAllScopes = true,
+                },
                 new Client
                 {
                     ClientName  = "Now Mobile",
