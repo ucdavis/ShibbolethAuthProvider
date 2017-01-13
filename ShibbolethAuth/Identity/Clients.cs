@@ -32,6 +32,38 @@ namespace ShibbolethAuth.Identity
                         "saml"
                     }
                 },
+                new Client
+                {
+                    ClientName  = "Now Mobile",
+                    ClientId = "nowmobile",
+                    Flow = Flows.AuthorizationCode,
+                    ClientSecrets = new List<Secret> { new Secret("secret".Sha256()) },
+                    RedirectUris = new List<string>
+                    {
+                        "nowmobile://cb"
+                    },
+                    AllowedScopes = new List<string>
+                    {
+                        "openid",
+                        "profile",
+                        "saml"
+                    }
+                },
+                new Client
+                {
+                    ClientName  = "Now Mobile",
+                    ClientId = "nowimplicit",
+                    ClientSecrets = new List<Secret> { new Secret("secret".Sha256()) },
+                    Flow = Flows.Implicit,
+                    Enabled = true,
+                    AllowAccessToAllScopes = true,
+                    AllowAccessTokensViaBrowser = true,
+                    RequireConsent = false,
+                    RedirectUris = new List<string>
+                    {
+                        "nowmobile://cb"
+                    }
+                },
                 new Client()
                 {
                     ClientName = "Core Tester",
